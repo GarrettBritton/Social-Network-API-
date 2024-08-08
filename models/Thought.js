@@ -1,26 +1,28 @@
 const { Schema, model } = require('mongoose');
 const reactionSchema = require('./Reaction.js');
 
-const dateFormat = (date) => {
-    return new Date(date).toLocaleString();
-  };
+// Helper function to format date as a localized string
+const formatDate = (date) => {
+  return new Date(date).toLocaleString();
+};
 
+// Define the Thought schema
 const thoughtSchema = new Schema(
   {
     thoughtText: {
-        type: String,
-        required: true,
-        minLength: 1,
-        maxLength: 280,
+      type: String,
+      required: true,
+      minLength: 1,
+      maxLength: 280,
     },
     createdAt: {
-        type: Date,
-        default: Date.now,
-        get: timestamp => dateFormat(timestamp),
+      type: Date,
+      default: Date.now,
+      get: timestamp => formatDate(timestamp),
     },
     username: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     reactions: [reactionSchema],
   },
@@ -33,10 +35,12 @@ const thoughtSchema = new Schema(
   }
 );
 
+// Virtual property to calculate the number of reactions
 thoughtSchema.virtual('reactionCount').get(function () {
-    return this.reactions.length;
-  });
+  return this.reactions.length;
+});
 
-const Thought = model('thought', thoughtSchema);
+// Create the Thought model using the thoughtSchema
+const Thought = model('Thought', thoughtSchema);
 
 module.exports = Thought;

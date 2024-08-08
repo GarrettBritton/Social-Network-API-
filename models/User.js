@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
 
+// Define the User schema
 const userSchema = new Schema(
   {
     username: {
@@ -12,19 +13,23 @@ const userSchema = new Schema(
       type: String,
       required: true,
       unique: true,
-      match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address'],
+      match: [
+         // Regular expression to validate email format
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+        'Please provide a valid email address',
+      ],
     },
     thoughts: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: "thought",
-        }
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'thought',
+      },
     ],
     friends: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: "user",
-        }
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+      },
     ],
   },
   {
@@ -35,10 +40,11 @@ const userSchema = new Schema(
   }
 );
 
+// Virtual property to calculate the number of friends
 userSchema.virtual('friendCount').get(function () {
-    return this.friends.length;
-  });
+  return this.friends.length;
+});
 
-const User = model('user', userSchema);
+const User = model('User', userSchema);
 
 module.exports = User;
